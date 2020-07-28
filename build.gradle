@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.rabbitmq.dmo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation('com.bladejava:blade-mvc:2.0.15.RELEASE'){
+		exclude group:'com.bladejava',module:'blade-log'
+	}
+	implementation 'org.springframework:spring-jdbc'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.3.1.RELEASE'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.1'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.1'
+	//compile group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
+}
+
+test {
+	useJUnitPlatform()
+}
