@@ -52,7 +52,9 @@ public class EmployeeController {
 			}
 		});
 
-		
+		for(Employee em : empList){
+			emp.setName(em.getName());
+		}
 		String query = "select";
 		if(empList.size() > 0){
 			rabbitMQSender.send(emp, query);
