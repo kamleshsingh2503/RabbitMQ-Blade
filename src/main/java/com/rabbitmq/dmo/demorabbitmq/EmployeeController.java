@@ -1,11 +1,11 @@
 package com.rabbitmq.dmo.demorabbitmq;
 
 import java.sql.ResultSet;
-
-import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.blade.ioc.annotation.Inject;
-import com.blade.mvc.annotation.DeleteRoute;
 import com.blade.mvc.annotation.GetRoute;
 import com.blade.mvc.annotation.JSON;
 import com.blade.mvc.annotation.Param;
@@ -19,7 +19,6 @@ import com.rabbitmq.dmo.demorabbitmq.model.Employee;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Path
 public class EmployeeController {
@@ -32,17 +31,33 @@ public class EmployeeController {
 
 	private JdbcTemplate jdbcTemplate;
 
-
-	@GetRoute("/producer/:empName/:empId")
+	@GetRoute("/producer/:empId")
 	@JSON
-	public String producer(@PathParam String empName, @PathParam String empId) {
+	public String producer(@PathParam String empId) {
 
 		Employee emp = new Employee();
 		emp.setEmpId(empId);
-		emp.setName(empName);
+		//emp.setName(empName);
+		String url = "Select * from employee where empId = ?";
+		setJdbcTemplate();
+		System.out.println("Hello world");
+		List<Employee> empList = new ArrayList<>();
+		empList = getJdbcTemplate().query(url, new Object[]{ empId }, new RowMapper(){
+			@Override
+			public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Employee emp = new Employee();
+				emp.setEmpId(rs.getString("empId"));
+				emp.setName(rs.getString("name"));
+				return emp;
+			}
+		});
+
+		
 		String query = "select";
-		rabbitMQSender.send(emp, query);
-		return "Message sent to the RabbitMQ JavaInUse Successfully";
+		if(empList.size() > 0){
+			rabbitMQSender.send(emp, query);
+		}
+		return "Message sent to the RabbitMQ Successfully";
 	}
 
 	@PostRoute("/addUser")

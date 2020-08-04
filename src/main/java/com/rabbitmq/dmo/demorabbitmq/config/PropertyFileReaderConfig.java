@@ -1,10 +1,7 @@
 package com.rabbitmq.dmo.demorabbitmq.config;
 
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.sql.DataSource;
 
 import com.blade.Blade;
 import com.blade.ioc.annotation.Bean;
@@ -25,7 +22,7 @@ public class PropertyFileReaderConfig implements BladeLoader {
 
     private DriverManagerDataSource dmSource;
 
-    private DataSource dataSource;
+    //private DataSource dataSource;
 
     @Override
     public void load(Blade blade) {
@@ -142,9 +139,9 @@ public class PropertyFileReaderConfig implements BladeLoader {
     /**
      * @return DataSource return the dataSource
      */
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+    // public DataSource getDataSource() {
+    //     return dataSource;
+    // }
 
     
 
